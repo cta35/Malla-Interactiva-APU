@@ -1,4 +1,4 @@
-fetch('data/courses.json')
+fetch('courses.json')
   .then(response => response.json())
   .then(data => {
     const tabla = document.getElementById('malla-horizontal');
