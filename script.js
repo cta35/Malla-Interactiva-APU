@@ -1,43 +1,61 @@
-fetch('data/datos/courses.json')
-  .then(res => res.json())
-  .then(data => renderGrid(data));
+fetch('data/courses.json')
+  .then(response => response.json())
+  .then(data => {
+    const grid = document.getElementById('grid');
+    const searchInput = document.getElementById('q');
+    const modal = document.getElementById('modal');
+    const closeModal = document.getElementById('closeModal');
 
-function renderGrid(courses) {
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
+    const years = {};
 
-  const years = groupBy(courses, 'año');
-  for (const year of Object.keys(years).sort()) {
-    const yearDiv = document.createElement('div');
-    yearDiv.className = 'year';
-    yearDiv.innerHTML = `<h2>Año ${year}</h2>`;
-    
-    const semestres = groupBy(years[year], 'semestre');
-    for (const semestre of Object.keys(semestres).sort()) {
-      const semDiv = document.createElement('div');
-      semDiv.className = 'semester';
-      semDiv.innerHTML = `<h3>Semestre ${semestre}</h3>`;
+    data.forEach(course => {
+      const year = Math.ceil(course.semestre / 2);
+      if (!years[year]) years[year] = {};
+      const sem = course.semestre;
+      if (!years[year][sem]) years[year][sem] = [];
+      years[year][sem].push(course);
+    });
 
-      semestres[semestre].forEach(curso => {
-        const div = document.createElement('div');
-        div.className = 'course';
-        div.textContent = `${curso.nombre}\n${curso.codigo} | ${curso.creditos} créditos`;
-        div.onclick = () => div.classList.toggle('taken');
-        semDiv.appendChild(div);
-      });
+    for (const [year, sems] of Object.entries(years)) {
+      const yearTitle = document.createElement('h2');
+      yearTitle.className = 'year-title';
+      yearTitle.textContent = `Año ${year}`;
+      grid.appendChild(yearTitle);
 
-      yearDiv.appendChild(semDiv);
+      for (const [sem, courses] of Object.entries(sems)) {
+        const semTitle = document.createElement('h3');
+        semTitle.className = 'semester-title';
+        semTitle.textContent = `Semestre ${sem}`;
+        grid.appendChild(semTitle);
+
+        courses.forEach(course => {
+          const div = document.createElement('div');
+          div.className = 'course';
+          div.textContent = `${course.nombre}\n${course.codigo} | ${course.creditos} créditos`;
+          div.addEventListener('click', () => {
+            document.getElementById('m-title').textContent = course.nombre;
+            document.getElementById('m-code').textContent = `Código: ${course.codigo}`;
+            document.getElementById('m-credits').textContent = `Créditos: ${course.creditos}`;
+            document.getElementById('m-area').textContent = `Área: ${course.area}`;
+            document.getElementById('m-desc').textContent = course.descripcion || 'Sin descripción.';
+            document.getElementById('m-pre').textContent = course.prerrequisitos?.length
+              ? `Prerrequisitos: ${course.prerrequisitos.join(', ')}`
+              : 'Sin prerrequisitos.';
+            modal.classList.remove('hidden');
+          });
+          grid.appendChild(div);
+        });
+      }
     }
 
-    grid.appendChild(yearDiv);
-  }
-}
+    closeModal.addEventListener('click', () => {
+      modal.classList.add('hidden');
+    });
 
-function groupBy(array, key) {
-  return array.reduce((acc, obj) => {
-    const k = obj[key];
-    if (!acc[k]) acc[k] = [];
-    acc[k].push(obj);
-    return acc;
-  }, {});
-}
+    searchInput.addEventListener('input', () => {
+      const value = searchInput.value.toLowerCase();
+      document.querySelectorAll('.course').forEach(course => {
+        course.style.display = course.textContent.toLowerCase().includes(value) ? 'block' : 'none';
+      });
+    });
+  });
