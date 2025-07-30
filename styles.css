@@ -1,20 +1,21 @@
 body {
   font-family: sans-serif;
-  background: #fdfdfd;
-  padding: 20px;
-  text-align: center;
+  margin: 20px;
+  background-color: #f9f9f9;
+  color: #333;
 }
 
 h1 {
-  color: #800000;
+  text-align: center;
+  color: #4B4B4B;
 }
 
-input#q {
-  padding: 8px;
+input[type="text"] {
+  display: block;
+  margin: 10px auto 20px auto;
+  padding: 10px;
   width: 300px;
-  border: 2px solid #800000;
-  border-radius: 5px;
-  margin-bottom: 20px;
+  font-size: 16px;
 }
 
 .table-container {
@@ -22,27 +23,37 @@ input#q {
 }
 
 table {
+  width: 100%;
   border-collapse: collapse;
-  margin: 0 auto;
+  table-layout: fixed;
 }
 
 th, td {
   border: 1px solid #ccc;
-  padding: 10px;
-  min-width: 200px;
-  max-width: 200px;
+  padding: 8px;
   vertical-align: top;
+  text-align: center;
+  min-width: 150px;
 }
 
 td {
-  background-color: #800000;
-  color: white;
   cursor: pointer;
-  border-radius: 8px;
-  white-space: pre-line;
+  position: relative;
+  background-color: #fff;
+  color: #4B4B4B;
+  transition: background-color 0.2s;
 }
 
-td.tachado {
+td:hover {
+  background-color: #f0f0f0;
+}
+
+.tachado {
   text-decoration: line-through;
   opacity: 0.6;
+}
+
+th {
+  background-color: #4B4B4B;
+  color: white;
 }
