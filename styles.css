@@ -1,53 +1,57 @@
-body {
-  font-family: sans-serif;
-  padding: 20px;
-  text-align: center;
-  background-color: #f9f9f9;
-}
+document.addEventListener("DOMContentLoaded", function () {
+  fetch("courses.json")
+    .then(response => response.json())
+    .then(data => {
+      // Detecta años y semestres máximos automáticamente
+      const maxSemestre = Math.max(...data.map(curso => curso.semestre));
+      const años = Math.ceil(maxSemestre / 2);
 
-h1 {
-  color: #800020;
-}
+      const grid = document.createElement("div");
+      grid.style.display = "flex";
+      grid.style.gap = "1.5rem";
+      grid.style.overflowX = "auto";
+      grid.style.marginTop = "1.5rem";
 
-input[type="text"] {
-  padding: 8px;
-  width: 300px;
-  border: 2px solid #800020;
-  border-radius: 6px;
-  margin-bottom: 20px;
-}
+      for (let año = 1; año <= años; año++) {
+        const añoDiv = document.createElement("div");
+        añoDiv.className = "año-container";
+        añoDiv.innerHTML = `<h3>Año ${año}</h3>`;
 
-.table-container {
-  overflow-x: auto;
-}
+        for (let sem = 1; sem <= 2; sem++) {
+          const semestre = (año - 1) * 2 + sem;
+          const semestreDiv = document.createElement("div");
+          semestreDiv.className = "semestre";
+          semestreDiv.innerHTML = `<h5>Semestre ${semestre}</h5>`;
 
-table {
-  border-collapse: collapse;
-  table-layout: fixed;
-  width: 100%;
-  min-width: 1000px;
-}
+          const cursos = data.filter(c => c.semestre === semestre);
 
-th, td {
-  border: 1px solid #ccc;
-  padding: 8px;
-  text-align: center;
-  vertical-align: top;
-  width: 200px;
-}
+          cursos.forEach(curso => {
+            const ramoDiv = document.createElement("div");
+            ramoDiv.className = "ramo";
+            ramoDiv.textContent = `${curso.nombre}\n${curso.codigo} | ${curso.creditos} cr`;
+            ramoDiv.addEventListener("click", () => {
+              ramoDiv.classList.toggle("tachado");
+            });
+            semestreDiv.appendChild(ramoDiv);
+          });
 
-.ramo {
-  background-color: #800020;
-  color: white;
-  padding: 6px;
-  margin: 4px 0;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
-  line-height: 1.2em;
-}
+          añoDiv.appendChild(semestreDiv);
+        }
 
-.ramo.tachado {
-  text-decoration: line-through;
-  opacity: 0.5;
-}
+        grid.appendChild(añoDiv);
+      }
+
+      // Quita la tabla si existe y agrega el grid horizontal
+      const tabla = document.getElementById("malla");
+      if (tabla) tabla.remove();
+      document.querySelector(".table-container").appendChild(grid);
+
+      // Buscador
+      document.getElementById("q").addEventListener("input", function () {
+        const texto = this.value.toLowerCase();
+        document.querySelectorAll('.ramo').forEach(div => {
+          div.style.display = div.textContent.toLowerCase().includes(texto) ? "block" : "none";
+        });
+      });
+    });
+});
