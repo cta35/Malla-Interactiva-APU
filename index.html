@@ -1,32 +1,25 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Malla Interactiva APU</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="site-header">
-    <h1>📚 Malla Interactiva APU</h1>
-    <div class="controls">
-      <input id="q" type="search" placeholder="Buscar ramo o código..." />
-    </div>
-  </header>
+  <h1>Malla Interactiva APU</h1>
+  <input type="text" id="q" placeholder="Buscar ramo o código..." />
+  <div id="grid"></div>
 
-  <main>
-    <div id="grid" class="grid"></div>
-  </main>
-
-  <div id="modal" class="modal hidden">
+  <div id="modal" class="hidden">
     <div class="modal-content">
-      <button id="closeModal" class="close">×</button>
       <h2 id="m-title"></h2>
       <p id="m-code"></p>
       <p id="m-credits"></p>
       <p id="m-area"></p>
       <p id="m-desc"></p>
-      <div id="m-pre"></div>
+      <p id="m-pre"></p>
+      <button id="closeModal">Cerrar</button>
     </div>
   </div>
 
