@@ -1,55 +1,86 @@
 body {
-  font-family: sans-serif;
+  font-family: Arial, sans-serif;
   background-color: #fff;
   color: #333;
   margin: 0;
-  padding: 2rem;
+  padding: 1rem;
 }
 
 h1 {
   text-align: center;
+  color: #4B4B4B;
+  margin-bottom: 1.5rem;
+}
+
+#q {
+  display: block;
+  margin: 0 auto 2rem auto;
+  padding: 0.5rem;
+  width: 90%;
+  max-width: 400px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.anio {
   margin-bottom: 2rem;
+}
+
+.anio h2 {
+  background-color: #f06eb1;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.semestre {
+  margin-bottom: 1rem;
+}
+
+.semestre h3 {
+  background-color: #ffb6d9;
+  padding: 0.3rem 1rem;
+  border-radius: 10px;
   color: #4B4B4B;
 }
 
-#grid {
+.grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
-}
-
-.column {
-  border: 1px solid #ccc;
-  padding: 1rem;
-  border-radius: 1rem;
-  background-color: #fdf0f5; /* rosado pastel */
+  margin-top: 0.5rem;
 }
 
 .card {
-  background-color: #fff;
-  border: 2px solid #4B4B4B; /* marengo */
-  border-radius: 1rem;
+  background-color: #4B4B4B;
+  color: white;
   padding: 1rem;
-  margin-bottom: 1rem;
+  border-radius: 12px;
   cursor: pointer;
   transition: transform 0.2s ease;
+  text-align: center;
 }
 
 .card:hover {
   transform: scale(1.03);
 }
 
-.card.tachado {
+.card.checked {
   text-decoration: line-through;
   opacity: 0.6;
 }
 
-.title {
-  font-weight: bold;
-  color: #4B4B4B;
+.hidden {
+  display: none;
 }
 
-.meta {
-  font-size: 0.9rem;
-  color: #777;
+.modal-content {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1rem;
+  max-width: 400px;
+  margin: 2rem auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
