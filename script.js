@@ -25,6 +25,7 @@ fetch('courses.json')
         const celda = fila.insertCell();
         celda.dataset.semestre = s;
         celda.classList.add("celda");
+        celda.style.verticalAlign = "top"; // importante para múltiples ramos
       }
     }
 
@@ -32,8 +33,8 @@ fetch('courses.json')
     data.forEach(curso => {
       const semestre = curso.semestre;
       const año = Math.ceil(semestre / 2);
-      const fila = tabla.rows[año]; // +1 porque header está en fila 0
-      const celda = fila.cells[semestre]; // celda correspondiente al semestre
+      const fila = tabla.rows[año]; // header es fila 0
+      const celda = fila.cells[semestre]; // columna del semestre
 
       const div = document.createElement('div');
       div.className = 'ramo';
