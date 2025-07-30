@@ -38,7 +38,7 @@ fetch("data/courses.json")
           courseDiv.style.backgroundColor = course.color || "#4B4B4B";
 
           courseDiv.addEventListener("click", () => {
-  // Se desactivó el modal
+  courseDiv.classList.toggle("tachado");
 });
 
           semesterDiv.appendChild(courseDiv);
