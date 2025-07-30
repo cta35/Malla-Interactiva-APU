@@ -1,44 +1,53 @@
-const q = document.getElementById("q");
-const grid = document.getElementById("grid");
+const table = document.getElementById("malla");
+const input = document.getElementById("q");
 
 fetch("data/courses.json")
-  .then((res) => res.json())
-  .then((data) => {
-    const filtered = data.filter(c => c.semestre >= 3 && c.semestre <= 10);
-    const years = {};
+  .then(res => res.json())
+  .then(data => {
+    const cursos = data.filter(c => c.semestre >= 3 && c.semestre <= 10);
 
-    filtered.forEach((course) => {
-      const year = Math.ceil(course.semestre / 2);
-      if (!years[year]) years[year] = [];
-      years[year].push(course);
-    });
+    const años = {
+      2: [3, 4],
+      3: [5, 6],
+      4: [7, 8],
+      5: [9, 10]
+    };
 
-    Object.keys(years).sort().forEach((year) => {
-      const yearLabel = document.createElement("div");
-      yearLabel.className = "year-label";
-      yearLabel.textContent = `Año ${year}`;
-      grid.appendChild(yearLabel);
+    const headerRow = document.createElement("tr");
+    headerRow.innerHTML = "<th>Año / Semestre</th>";
+    for (let s = 3; s <= 10; s++) {
+      headerRow.innerHTML += `<th>Semestre ${s}</th>`;
+    }
+    table.appendChild(headerRow);
+
+    Object.entries(años).forEach(([año, semestres]) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `<th>Año ${año}</th>`;
 
       for (let s = 3; s <= 10; s++) {
-        const course = years[year].find(c => c.semestre === s);
-        const courseDiv = document.createElement("div");
-        courseDiv.className = "course";
-        if (course) {
-          courseDiv.textContent = `${course.nombre}\n${course.codigo} | ${course.creditos} créditos`;
-          courseDiv.addEventListener("click", () => {
-            courseDiv.classList.toggle("tachado");
+        const celda = document.createElement("td");
+        const ramo = cursos.find(c => c.semestre == s && Math.ceil(c.semestre / 2) == año);
+
+        if (ramo) {
+          celda.textContent = `${ramo.nombre}\n${ramo.codigo} | ${ramo.creditos} cr`;
+          celda.addEventListener("click", () => {
+            celda.classList.toggle("tachado");
           });
         } else {
-          courseDiv.style.visibility = "hidden";
+          celda.style.background = "#eee";
+          celda.textContent = "-";
         }
-        grid.appendChild(courseDiv);
+
+        row.appendChild(celda);
       }
+
+      table.appendChild(row);
     });
 
-    q.addEventListener("input", () => {
-      const value = q.value.toLowerCase();
-      document.querySelectorAll(".course").forEach((course) => {
-        course.style.display = course.textContent.toLowerCase().includes(value) ? "block" : "none";
+    input.addEventListener("input", () => {
+      const term = input.value.toLowerCase();
+      document.querySelectorAll("td").forEach(celda => {
+        celda.style.display = celda.textContent.toLowerCase().includes(term) ? "" : "none";
       });
     });
   });
