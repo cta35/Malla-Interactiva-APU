@@ -1,12 +1,5 @@
 const q = document.getElementById("q");
 const grid = document.getElementById("grid");
-const modal = document.getElementById("modal");
-const mTitle = document.getElementById("m-title");
-const mCode = document.getElementById("m-code");
-const mCredits = document.getElementById("m-credits");
-const mArea = document.getElementById("m-area");
-const mDesc = document.getElementById("m-desc");
-const mPre = document.getElementById("m-pre");
 
 fetch("data/courses.json")
   .then((res) => res.json())
@@ -16,38 +9,30 @@ fetch("data/courses.json")
 
     filtered.forEach((course) => {
       const year = Math.ceil(course.semestre / 2);
-      if (!years[year]) years[year] = {};
-      if (!years[year][course.semestre]) years[year][course.semestre] = [];
-      years[year][course.semestre].push(course);
+      if (!years[year]) years[year] = [];
+      years[year].push(course);
     });
 
     Object.keys(years).sort().forEach((year) => {
-      const yearDiv = document.createElement("div");
-      yearDiv.className = "year";
-      yearDiv.innerHTML = `<h2>Año ${year}</h2>`;
-      
-      Object.keys(years[year]).sort().forEach((semester) => {
-        const semesterDiv = document.createElement("div");
-        semesterDiv.className = "semester";
-        semesterDiv.innerHTML = `<h3>Semestre ${semester % 2 === 1 ? 1 : 2}</h3>`;
-        
-        years[year][semester].forEach((course) => {
-          const courseDiv = document.createElement("div");
-          courseDiv.className = "course";
+      const yearLabel = document.createElement("div");
+      yearLabel.className = "year-label";
+      yearLabel.textContent = `Año ${year}`;
+      grid.appendChild(yearLabel);
+
+      for (let s = 3; s <= 10; s++) {
+        const course = years[year].find(c => c.semestre === s);
+        const courseDiv = document.createElement("div");
+        courseDiv.className = "course";
+        if (course) {
           courseDiv.textContent = `${course.nombre}\n${course.codigo} | ${course.creditos} créditos`;
-          courseDiv.style.backgroundColor = course.color || "#4B4B4B";
-
           courseDiv.addEventListener("click", () => {
-  courseDiv.classList.toggle("tachado");
-});
-
-          semesterDiv.appendChild(courseDiv);
-        });
-
-        yearDiv.appendChild(semesterDiv);
-      });
-
-      grid.appendChild(yearDiv);
+            courseDiv.classList.toggle("tachado");
+          });
+        } else {
+          courseDiv.style.visibility = "hidden";
+        }
+        grid.appendChild(courseDiv);
+      }
     });
 
     q.addEventListener("input", () => {
@@ -55,12 +40,5 @@ fetch("data/courses.json")
       document.querySelectorAll(".course").forEach((course) => {
         course.style.display = course.textContent.toLowerCase().includes(value) ? "block" : "none";
       });
-    });
-
-    // ✅ Cerrar modal al hacer clic afuera del contenido
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) {
-        modal.classList.add("hidden");
-      }
     });
   });
