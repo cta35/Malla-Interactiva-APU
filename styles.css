@@ -1,56 +1,53 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f3f3f3;
+  background-color: #f2f2f2;
   margin: 0;
-  padding: 1rem;
+  padding: 20px;
 }
 
 h1 {
   text-align: center;
-  color: #333;
-  margin-bottom: 1rem;
+  color: #4B0000; /* Burdeo oscuro */
+  margin-bottom: 20px;
 }
 
-input[type="text"] {
+#q {
   display: block;
-  margin: 0 auto 2rem auto;
-  padding: 0.5rem;
+  margin: 0 auto 30px;
+  padding: 10px;
   width: 90%;
   max-width: 400px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
   font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #aaa;
 }
 
-.year-title, .semester-title {
-  margin-top: 2rem;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-  color: #222;
+.year {
+  margin-bottom: 40px;
 }
 
-#grid {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+.year h2 {
+  color: #4B0000;
+  margin-bottom: 10px;
 }
 
 .semester {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+  margin-bottom: 20px;
+}
+
+.semester h3 {
+  margin-bottom: 10px;
+  color: #4B0000;
 }
 
 .course {
-  background-color: #800000; /* Color burdeo */
+  background-color: #800000; /* Burdeo */
   color: white;
-  padding: 1rem;
-  border-radius: 12px;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 10px;
   cursor: pointer;
-  transition: transform 0.2s, background-color 0.3s;
-  text-align: left;
-  line-height: 1.5;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
 }
 
 .course:hover {
@@ -58,47 +55,7 @@ input[type="text"] {
   background-color: #660000;
 }
 
-.course.completed {
-  opacity: 0.7;
+.course.taken {
   text-decoration: line-through;
-}
-
-#modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-}
-
-.modal-content {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 8px;
-  max-width: 400px;
-  width: 90%;
-  text-align: center;
-}
-
-#closeModal {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #800000;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-#closeModal:hover {
-  background-color: #660000;
-}
-
-.hidden {
-  display: none;
+  opacity: 0.6;
 }
