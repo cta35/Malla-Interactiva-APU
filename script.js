@@ -7,7 +7,6 @@ const mCredits = document.getElementById("m-credits");
 const mArea = document.getElementById("m-area");
 const mDesc = document.getElementById("m-desc");
 const mPre = document.getElementById("m-pre");
-const closeModal = document.getElementById("closeModal");
 
 fetch("data/courses.json")
   .then((res) => res.json())
@@ -63,8 +62,11 @@ fetch("data/courses.json")
         course.style.display = course.textContent.toLowerCase().includes(value) ? "block" : "none";
       });
     });
-  });
 
-closeModal.addEventListener("click", () => {
-  modal.classList.add("hidden");
-});
+    // ✅ Cerrar modal al hacer clic afuera del contenido
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.classList.add("hidden");
+      }
+    });
+  });
