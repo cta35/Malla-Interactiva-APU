@@ -38,14 +38,8 @@ fetch("data/courses.json")
           courseDiv.style.backgroundColor = course.color || "#4B4B4B";
 
           courseDiv.addEventListener("click", () => {
-            mTitle.textContent = course.nombre;
-            mCode.textContent = `Código: ${course.codigo}`;
-            mCredits.textContent = `Créditos: ${course.creditos}`;
-            mArea.textContent = `Área: ${course.area}`;
-            mDesc.textContent = `Descripción: ${course.descripcion || "No disponible."}`;
-            mPre.textContent = `Prerrequisitos: ${course.prerrequisitos.length > 0 ? course.prerrequisitos.join(", ") : "Ninguno"}`;
-            modal.classList.remove("hidden");
-          });
+  // Se desactivó el modal
+});
 
           semesterDiv.appendChild(courseDiv);
         });
