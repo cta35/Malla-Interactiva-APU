@@ -1,59 +1,27 @@
-body {
-  font-family: sans-serif;
-  margin: 20px;
-  background-color: #f9f9f9;
-  color: #333;
-}
-
-h1 {
-  text-align: center;
-  color: #4B4B4B;
-}
-
-input[type="text"] {
-  display: block;
-  margin: 10px auto 20px auto;
-  padding: 10px;
-  width: 300px;
-  font-size: 16px;
-}
-
-.table-container {
-  overflow-x: auto;
-}
-
 table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
 }
 
 th, td {
-  border: 1px solid #ccc;
-  padding: 8px;
+  border: 1px solid #999;
+  padding: 10px;
   vertical-align: top;
   text-align: center;
-  min-width: 150px;
 }
 
-td {
-  cursor: pointer;
-  position: relative;
-  background-color: #fff;
-  color: #4B4B4B;
-  transition: background-color 0.2s;
-}
-
-td:hover {
-  background-color: #f0f0f0;
-}
-
-.tachado {
-  text-decoration: line-through;
-  opacity: 0.6;
-}
-
-th {
+.ramo {
   background-color: #4B4B4B;
   color: white;
+  padding: 6px;
+  margin: 4px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.2em;
+}
+
+.ramo.tachado {
+  text-decoration: line-through;
+  opacity: 0.6;
 }
