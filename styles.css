@@ -6,13 +6,13 @@ body {
 }
 
 h1 {
-  color: #4B4B4B;
+  color: #800020;
 }
 
 input[type="text"] {
   padding: 8px;
   width: 300px;
-  border: 2px solid #4B4B4B;
+  border: 2px solid #800020;
   border-radius: 6px;
   margin-bottom: 20px;
 }
@@ -22,23 +22,22 @@ input[type="text"] {
 }
 
 table {
-  width: 100%;
   border-collapse: collapse;
-  min-width: 1200px;
   table-layout: fixed;
+  width: 100%;
+  min-width: 1000px;
 }
 
 th, td {
-  border: 1px solid #999;
+  border: 1px solid #ccc;
   padding: 8px;
   text-align: center;
   vertical-align: top;
-  min-width: 120px;
-  height: 120px;
+  width: 200px;
 }
 
 .ramo {
-  background-color: #4B4B4B;
+  background-color: #800020;
   color: white;
   padding: 6px;
   margin: 4px 0;
@@ -50,5 +49,5 @@ th, td {
 
 .ramo.tachado {
   text-decoration: line-through;
-  opacity: 0.6;
+  opacity: 0.5;
 }
