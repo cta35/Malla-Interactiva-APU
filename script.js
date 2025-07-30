@@ -5,7 +5,7 @@ fetch('courses.json')
     const totalSemestres = 10;
     const años = 5;
 
-    // Crear encabezado con semestres
+    // Crear encabezado horizontal
     const header = tabla.insertRow();
     header.insertCell().innerHTML = "<strong>Año / Semestre</strong>";
     for (let s = 1; s <= totalSemestres; s++) {
@@ -22,25 +22,20 @@ fetch('courses.json')
       fila.appendChild(th);
 
       for (let s = 1; s <= totalSemestres; s++) {
-        const celda = fila.insertCell();
-        celda.dataset.semestre = s;
-        celda.classList.add("celda");
-        celda.style.verticalAlign = "top"; // importante para múltiples ramos
+        fila.insertCell(); // celdas vacías que se llenarán después
       }
     }
 
-    // Insertar cursos
+    // Insertar cursos en la celda correcta
     data.forEach(curso => {
       const semestre = curso.semestre;
       const año = Math.ceil(semestre / 2);
-      const fila = tabla.rows[año]; // header es fila 0
-      const celda = fila.cells[semestre]; // columna del semestre
+      const fila = tabla.rows[año];
+      const celda = fila.cells[semestre];
 
       const div = document.createElement('div');
       div.className = 'ramo';
       div.innerHTML = `<strong>${curso.nombre}</strong><br>${curso.codigo} | ${curso.creditos} cr`;
-      div.style.backgroundColor = curso.color || "#4B4B4B";
-      div.style.color = "white";
       div.addEventListener('click', () => {
         div.classList.toggle('tachado');
       });
