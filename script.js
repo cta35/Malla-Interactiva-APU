@@ -1,47 +1,92 @@
-const state = {
-  data: [],
-  q: ""
-};
+const contenedor = document.getElementById("contenedor-anios");
+const buscador = document.getElementById("q");
+const modal = document.getElementById("modal");
+const closeModal = document.getElementById("closeModal");
 
-async function load() {
-  const res = await fetch('datos/courses.json');
-  state.data = await res.json();
-  render();
-}
+let cursos = [];
 
-function render() {
-  const grid = document.getElementById("grid");
-  grid.innerHTML = "";
-
-  const maxSem = Math.max(...state.data.map(c => c.semestre));
-  const bySem = Array.from({ length: maxSem }, () => []);
-
-  state.data.forEach(curso => {
-    bySem[curso.semestre - 1].push(curso);
+fetch("data/datos/courses.json")
+  .then(response => response.json())
+  .then(data => {
+    cursos = data;
+    mostrarCursos(cursos);
   });
 
-  bySem.forEach((lista, i) => {
-    const col = document.createElement("div");
-    col.className = "column";
-    const h = document.createElement("h3");
-    h.textContent = `Semestre ${i + 1}`;
-    col.appendChild(h);
+function mostrarCursos(cursos) {
+  contenedor.innerHTML = "";
 
-    lista.forEach(curso => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <p class="title">${curso.nombre}</p>
-        <p class="meta">${curso.codigo} | ${curso.creditos} créditos</p>
-      `;
-      card.addEventListener("click", () => {
-        card.classList.toggle("tachado");
+  const agrupados = {};
+
+  cursos.forEach(curso => {
+    const key = `${curso.anio || Math.ceil(curso.semestre / 2)}-${curso.semestre}`;
+    if (!agrupados[key]) agrupados[key] = [];
+    agrupados[key].push(curso);
+  });
+
+  for (let anio = 2; anio <= 5; anio++) {
+    const seccionAnio = document.createElement("div");
+    seccionAnio.className = "anio";
+    const titulo = document.createElement("h2");
+    titulo.textContent = `Año ${anio}`;
+    seccionAnio.appendChild(titulo);
+
+    for (let semestre = 1; semestre <= 2; semestre++) {
+      const key = `${anio}-${(anio - 1) * 2 + semestre}`;
+      const cursosSemestre = agrupados[key];
+      if (!cursosSemestre) continue;
+
+      const semestreDiv = document.createElement("div");
+      semestreDiv.className = "semestre";
+      const subtitulo = document.createElement("h3");
+      subtitulo.textContent = `Semestre ${semestre}`;
+      semestreDiv.appendChild(subtitulo);
+
+      const grid = document.createElement("div");
+      grid.className = "grid";
+
+      cursosSemestre.forEach(curso => {
+        const div = document.createElement("div");
+        div.className = "curso";
+        div.style.backgroundColor = curso.color || "#4B4B4B";
+        div.innerHTML = `
+          <strong>${curso.nombre}</strong><br>
+          ${curso.codigo} | ${curso.creditos} créditos
+        `;
+        div.addEventListener("click", () => {
+          div.classList.toggle("tachado");
+        });
+        div.addEventListener("dblclick", () => mostrarModal(curso));
+        grid.appendChild(div);
       });
-      col.appendChild(card);
-    });
 
-    grid.appendChild(col);
-  });
+      semestreDiv.appendChild(grid);
+      seccionAnio.appendChild(semestreDiv);
+    }
+
+    contenedor.appendChild(seccionAnio);
+  }
 }
 
-load();
+function mostrarModal(curso) {
+  document.getElementById("m-title").textContent = curso.nombre;
+  document.getElementById("m-code").textContent = `Código: ${curso.codigo}`;
+  document.getElementById("m-credits").textContent = `Créditos: ${curso.creditos}`;
+  document.getElementById("m-area").textContent = `Área: ${curso.area || "—"}`;
+  document.getElementById("m-desc").textContent = `Descripción: ${curso.descripcion || "—"}`;
+  document.getElementById("m-pre").textContent = curso.prerrequisitos?.length
+    ? `Prerrequisitos: ${curso.prerrequisitos.join(", ")}`
+    : "Prerrequisitos: Ninguno";
+  modal.classList.remove("hidden");
+}
+
+closeModal.addEventListener("click", () => {
+  modal.classList.add("hidden");
+});
+
+buscador.addEventListener("input", () => {
+  const texto = buscador.value.toLowerCase();
+  const filtrados = cursos.filter(c =>
+    c.nombre.toLowerCase().includes(texto) || c.codigo.toLowerCase().includes(texto)
+  );
+  mostrarCursos(filtrados);
+});
