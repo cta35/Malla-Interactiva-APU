@@ -1,27 +1,16 @@
-const SEMESTRES_POR_AÑO = 2;
-const SEMESTRES_TOTAL = 10;
-
 fetch('courses.json')
   .then(response => response.json())
   .then(data => {
     const tabla = document.getElementById('malla');
-    const años = Math.ceil(SEMESTRES_TOTAL / SEMESTRES_POR_AÑO);
-    const cursosPorSemestre = {};
-
-    // Agrupar cursos por semestre
-    data.forEach(curso => {
-      if (!cursosPorSemestre[curso.semestre]) {
-        cursosPorSemestre[curso.semestre] = [];
-      }
-      cursosPorSemestre[curso.semestre].push(curso);
-    });
+    const totalSemestres = 10;
+    const años = 5;
 
     // Crear encabezado con semestres
     const header = tabla.insertRow();
-    header.insertCell(); // celda vacía en esquina superior izquierda
-    for (let s = 1; s <= SEMESTRES_TOTAL; s++) {
+    header.insertCell().innerHTML = "<strong>Año / Semestre</strong>";
+    for (let s = 1; s <= totalSemestres; s++) {
       const th = document.createElement('th');
-      th.innerText = `Sem ${s}`;
+      th.innerText = `Semestre ${s}`;
       header.appendChild(th);
     }
 
@@ -29,28 +18,34 @@ fetch('courses.json')
     for (let año = 1; año <= años; año++) {
       const fila = tabla.insertRow();
       const th = document.createElement('th');
-      th.innerText = `${año}° Año`;
+      th.innerText = `Año ${año}`;
       fila.appendChild(th);
 
-      for (let s = 1; s <= SEMESTRES_TOTAL; s++) {
+      for (let s = 1; s <= totalSemestres; s++) {
         const celda = fila.insertCell();
         celda.dataset.semestre = s;
-        if (s >= (año - 1) * SEMESTRES_POR_AÑO + 1 && s <= año * SEMESTRES_POR_AÑO) {
-          const cursos = cursosPorSemestre[s] || [];
-          cursos.forEach(curso => {
-            const div = document.createElement('div');
-            div.innerHTML = `<strong>${curso.codigo}</strong><br>${curso.nombre}`;
-            div.classList.add('ramo');
-            div.style.marginBottom = '10px';
-            div.style.color = curso.color || '#4B4B4B';
-            div.addEventListener('click', () => {
-              div.classList.toggle('tachado');
-            });
-            celda.appendChild(div);
-          });
-        }
+        celda.classList.add("celda");
       }
     }
+
+    // Insertar cursos
+    data.forEach(curso => {
+      const semestre = curso.semestre;
+      const año = Math.ceil(semestre / 2);
+      const fila = tabla.rows[año]; // +1 porque header está en fila 0
+      const celda = fila.cells[semestre]; // celda correspondiente al semestre
+
+      const div = document.createElement('div');
+      div.className = 'ramo';
+      div.innerHTML = `<strong>${curso.nombre}</strong><br>${curso.codigo} | ${curso.creditos} cr`;
+      div.style.backgroundColor = curso.color || "#4B4B4B";
+      div.style.color = "white";
+      div.addEventListener('click', () => {
+        div.classList.toggle('tachado');
+      });
+
+      celda.appendChild(div);
+    });
 
     // Buscador
     const buscador = document.getElementById('q');
