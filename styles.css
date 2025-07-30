@@ -7,7 +7,6 @@ body {
 
 h1 {
   color: #4B4B4B;
-  margin-bottom: 10px;
 }
 
 input[type="text"] {
@@ -25,22 +24,17 @@ input[type="text"] {
 table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
   min-width: 1200px;
+  table-layout: fixed;
 }
 
 th, td {
-  border: 1px solid #ccc;
-  padding: 6px;
-  vertical-align: top;
+  border: 1px solid #999;
+  padding: 8px;
   text-align: center;
+  vertical-align: top;
   min-width: 120px;
-  min-height: 120px;
-}
-
-th {
-  background-color: #eee;
-  font-weight: bold;
+  height: 120px;
 }
 
 .ramo {
