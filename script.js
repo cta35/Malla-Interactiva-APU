@@ -1,61 +1,70 @@
-fetch('data/courses.json')
-  .then(response => response.json())
-  .then(data => {
-    const grid = document.getElementById('grid');
-    const searchInput = document.getElementById('q');
-    const modal = document.getElementById('modal');
-    const closeModal = document.getElementById('closeModal');
+const q = document.getElementById("q");
+const grid = document.getElementById("grid");
+const modal = document.getElementById("modal");
+const mTitle = document.getElementById("m-title");
+const mCode = document.getElementById("m-code");
+const mCredits = document.getElementById("m-credits");
+const mArea = document.getElementById("m-area");
+const mDesc = document.getElementById("m-desc");
+const mPre = document.getElementById("m-pre");
+const closeModal = document.getElementById("closeModal");
 
+fetch("data/courses.json")
+  .then((res) => res.json())
+  .then((data) => {
+    const filtered = data.filter(c => c.semestre >= 3 && c.semestre <= 10);
     const years = {};
 
-    data.forEach(course => {
+    filtered.forEach((course) => {
       const year = Math.ceil(course.semestre / 2);
       if (!years[year]) years[year] = {};
-      const sem = course.semestre;
-      if (!years[year][sem]) years[year][sem] = [];
-      years[year][sem].push(course);
+      if (!years[year][course.semestre]) years[year][course.semestre] = [];
+      years[year][course.semestre].push(course);
     });
 
-    for (const [year, sems] of Object.entries(years)) {
-      const yearTitle = document.createElement('h2');
-      yearTitle.className = 'year-title';
-      yearTitle.textContent = `Año ${year}`;
-      grid.appendChild(yearTitle);
+    Object.keys(years).sort().forEach((year) => {
+      const yearDiv = document.createElement("div");
+      yearDiv.className = "year";
+      yearDiv.innerHTML = `<h2>Año ${year}</h2>`;
+      
+      Object.keys(years[year]).sort().forEach((semester) => {
+        const semesterDiv = document.createElement("div");
+        semesterDiv.className = "semester";
+        semesterDiv.innerHTML = `<h3>Semestre ${semester % 2 === 1 ? 1 : 2}</h3>`;
+        
+        years[year][semester].forEach((course) => {
+          const courseDiv = document.createElement("div");
+          courseDiv.className = "course";
+          courseDiv.textContent = `${course.nombre}\n${course.codigo} | ${course.creditos} créditos`;
+          courseDiv.style.backgroundColor = course.color || "#4B4B4B";
 
-      for (const [sem, courses] of Object.entries(sems)) {
-        const semTitle = document.createElement('h3');
-        semTitle.className = 'semester-title';
-        semTitle.textContent = `Semestre ${sem}`;
-        grid.appendChild(semTitle);
-
-        courses.forEach(course => {
-          const div = document.createElement('div');
-          div.className = 'course';
-          div.textContent = `${course.nombre}\n${course.codigo} | ${course.creditos} créditos`;
-          div.addEventListener('click', () => {
-            document.getElementById('m-title').textContent = course.nombre;
-            document.getElementById('m-code').textContent = `Código: ${course.codigo}`;
-            document.getElementById('m-credits').textContent = `Créditos: ${course.creditos}`;
-            document.getElementById('m-area').textContent = `Área: ${course.area}`;
-            document.getElementById('m-desc').textContent = course.descripcion || 'Sin descripción.';
-            document.getElementById('m-pre').textContent = course.prerrequisitos?.length
-              ? `Prerrequisitos: ${course.prerrequisitos.join(', ')}`
-              : 'Sin prerrequisitos.';
-            modal.classList.remove('hidden');
+          courseDiv.addEventListener("click", () => {
+            mTitle.textContent = course.nombre;
+            mCode.textContent = `Código: ${course.codigo}`;
+            mCredits.textContent = `Créditos: ${course.creditos}`;
+            mArea.textContent = `Área: ${course.area}`;
+            mDesc.textContent = `Descripción: ${course.descripcion || "No disponible."}`;
+            mPre.textContent = `Prerrequisitos: ${course.prerrequisitos.length > 0 ? course.prerrequisitos.join(", ") : "Ninguno"}`;
+            modal.classList.remove("hidden");
           });
-          grid.appendChild(div);
-        });
-      }
-    }
 
-    closeModal.addEventListener('click', () => {
-      modal.classList.add('hidden');
+          semesterDiv.appendChild(courseDiv);
+        });
+
+        yearDiv.appendChild(semesterDiv);
+      });
+
+      grid.appendChild(yearDiv);
     });
 
-    searchInput.addEventListener('input', () => {
-      const value = searchInput.value.toLowerCase();
-      document.querySelectorAll('.course').forEach(course => {
-        course.style.display = course.textContent.toLowerCase().includes(value) ? 'block' : 'none';
+    q.addEventListener("input", () => {
+      const value = q.value.toLowerCase();
+      document.querySelectorAll(".course").forEach((course) => {
+        course.style.display = course.textContent.toLowerCase().includes(value) ? "block" : "none";
       });
     });
   });
+
+closeModal.addEventListener("click", () => {
+  modal.classList.add("hidden");
+});
