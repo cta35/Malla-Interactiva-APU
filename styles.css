@@ -1,13 +1,46 @@
+body {
+  font-family: sans-serif;
+  padding: 20px;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+h1 {
+  color: #4B4B4B;
+  margin-bottom: 10px;
+}
+
+input[type="text"] {
+  padding: 8px;
+  width: 300px;
+  border: 2px solid #4B4B4B;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
+  min-width: 1200px;
 }
 
 th, td {
-  border: 1px solid #999;
-  padding: 10px;
+  border: 1px solid #ccc;
+  padding: 6px;
   vertical-align: top;
   text-align: center;
+  min-width: 120px;
+  min-height: 120px;
+}
+
+th {
+  background-color: #eee;
+  font-weight: bold;
 }
 
 .ramo {
