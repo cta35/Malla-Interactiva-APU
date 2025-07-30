@@ -4,7 +4,7 @@ const state = {
 };
 
 async function load() {
-  const res = await fetch('data/datos/courses.json');  // ← esta línea es la corregida
+  const res = await fetch('data/datos/courses.json');
   state.data = await res.json();
   render();
 }
